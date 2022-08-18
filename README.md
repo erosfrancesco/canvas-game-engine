@@ -1,4 +1,5 @@
 # Canvas Game Engine
+
 Minimal game engine. This is the result of combining various tutorials and example codes.
 
 Can add and update GameObjects programmatically (FPS Counter: see src/fps.js)
