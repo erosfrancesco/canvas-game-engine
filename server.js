@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 80
 const app = express()
 app.use(cors())
 app.use('/src', express.static('src'))
