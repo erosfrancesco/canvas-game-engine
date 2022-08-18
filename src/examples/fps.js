@@ -1,5 +1,5 @@
 // EXAMPLE OF SIMPLE GAMEOBJECT
-import { GameObject } from '../classes/index.js';
+import { GameObject } from '../game_objects/index.js';
 
 /** METHODS */
 const calculateFPS = gObj => secondsPassed => {

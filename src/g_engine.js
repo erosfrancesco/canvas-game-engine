@@ -1,7 +1,9 @@
-import canvas, { context } from "./canvas.js"; // import canvas and attach it to game
+// import canvas and attach it to game
+import canvas, { context } from "./canvas.js";
 export const game = {};
 game.context = context; 
 game.canvas = canvas;
+//
 
 // loop
 export const gameLoop = (oldTimeStamp, timeStamp) => {
@@ -25,7 +27,6 @@ game.tasks = {
         game.tasks.update[id] = update
     },
     destroy: (id) => {
-        console.log('Got it', id)
         delete game.tasks.draw[id];
         delete game.tasks.update[id];
     }

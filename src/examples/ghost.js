@@ -1,5 +1,5 @@
 // EXAMPLE OF DESTROYABLE GAMEOBJECT
-import { GameObject, Destroyable } from '../classes/index.js';
+import { GameObject, Destroyable } from '../game_objects/index.js';
 
 /** METHODS */
 const updateGhost = gObj => secondsPassed => {
