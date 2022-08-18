@@ -1,3 +1,4 @@
+// EXAMPLE OF SIMPLE GAMEOBJECT
 import { GameObject } from '../classes/index.js';
 
 /** METHODS */

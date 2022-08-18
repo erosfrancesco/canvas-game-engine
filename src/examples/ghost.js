@@ -1,3 +1,4 @@
+// EXAMPLE OF DESTROYABLE GAMEOBJECT
 import { GameObject, Destroyable } from '../classes/index.js';
 
 /** METHODS */
