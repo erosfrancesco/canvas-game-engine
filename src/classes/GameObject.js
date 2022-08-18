@@ -3,7 +3,7 @@
 
 /** METHODS */
 // Register a task in game. Tasks could also be treated as objects (GameObjects)
-const register = (game, id, draw, update) => game.tasks.add(id, () => draw(game), (delta) => update(delta, game));
+const register = (engine, id, draw, update) => engine.tasks.add(id, () => draw(engine), (delta) => update(delta, engine));
 
 /** CLASS */
 export const GameObject = (params, opts = {}) => {
@@ -12,7 +12,10 @@ export const GameObject = (params, opts = {}) => {
     const gObj = { id, ...opts };
     gObj.draw = draw(gObj);
     gObj.update = update(gObj);
-    gObj.register = (game) => register(game, id, gObj.draw, gObj.update);
+    gObj.register = (engine) => {
+        gObj.engine = engine;
+        register(engine, id, gObj.draw, gObj.update);
+    }
     
     return gObj;
 };
