@@ -15,9 +15,11 @@ export const MetricWorld = (game, worldParams) => {
     const { coordinates = coordinates_2d, createPosition = createStandardPosition } = worldParams || {};
 
     /** METHOD OVERRIDE */
-    game.add = (gObj, params) => {
-        gObj.register(game)
-        return WorldObject(gObj, params)
+    game.add = (gObj) => {
+        // EXISTANCE PRECEDES ESSENCE
+        gObj.register(game);
+
+        return WorldObject(gObj, gObj.worldParams);
     };
 
     game.world = {
@@ -32,14 +34,14 @@ export const MetricWorld = (game, worldParams) => {
         }
     };
 
-    
-
     return game;
 }
 
+
 export const WorldObject = (GameObject, params) => {
+    
     /** PARAMS SANITIZATION */
-    const { position, updatePosition = () => { return {} } } = params || {};
+    const { position, updatePosition = () => { return {} }, onWorldAdded = (g) => { return g } } = params || {};
     const { id, engine } = GameObject;
     const { world } = engine;
     GameObject.events = GameObject.events || {};
@@ -66,7 +68,8 @@ export const WorldObject = (GameObject, params) => {
     const initialPosition = position || world.createPosition();
     updatePositionLoop(initialPosition);
 
-    return GameObject;
+    
+    return onWorldAdded(GameObject);
 }
 
 export default MetricWorld;
