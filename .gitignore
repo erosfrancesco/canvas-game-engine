@@ -18,3 +18,6 @@ node_modules/
 
 # Lock files
 *-lock.json
+
+# Personal development (needs branching)
+/dev

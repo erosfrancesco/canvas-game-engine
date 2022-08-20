@@ -25,7 +25,6 @@ export const GameObject = (params, opts = {}) => {
     }
 
     gObj.setState = (value, ...path) => {
-
         if (path.length === 1) {
             gObj.state[path[0]] = value;
             return gObj.state;

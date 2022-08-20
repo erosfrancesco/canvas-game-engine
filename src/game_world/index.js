@@ -5,9 +5,7 @@
 // Note that the game world is not necessary for a game, only the game engine is.
 // You could very well develop a game with only GameObjects, and there will be no need to tie them to a particular WorldObject
 
-import engine from '../g_engine.js';
-import MetricWorld from './metric.js';
+import game from '../g_engine.js';
 
-export const game = MetricWorld(engine);
-
+export {game};
 export default game;
