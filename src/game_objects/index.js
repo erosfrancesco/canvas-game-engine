@@ -2,3 +2,4 @@
 
 export * from './GameObject.js';
 export * from './Destroyable.js';
+export * from './FosterParent.js';
