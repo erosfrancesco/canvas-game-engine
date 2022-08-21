@@ -64,18 +64,14 @@ game.forEachChild = (f) => Object.values(game.children).forEach(f);
 //
 
 
-const iterDraw = (g_obj, ...params) => {
-    g_obj.draw(...params);
-    Object.values(g_obj.children).forEach(c => iterDraw(c, ...params));
-}
-const iterUpdate = (g_obj, ...params) => {
-    g_obj.update(...params);
-    Object.values(g_obj.children).forEach(c => iterUpdate(c, ...params));
+// Engine main Methods
+const iterate = (g_obj, name, ...params) => {
+    g_obj[name](...params);
+    Object.values(g_obj.children).forEach(c => iterate(c, name, ...params));
 }
 
-// Engine main Methods
-export const draw = () => game.forEachChild(iterDraw);
-export const update = secondsPassed => game.forEachChild(child => iterUpdate(child, secondsPassed || 0)); 
+export const draw = () => game.forEachChild(c => iterate(c, 'draw'));
+export const update = secondsPassed => game.forEachChild(child => iterate(child, 'update', secondsPassed || 0)); 
 // game loop
 export const gameLoop = (oldTimeStamp, timeStamp) => {
     // Calculate how much time has passed
