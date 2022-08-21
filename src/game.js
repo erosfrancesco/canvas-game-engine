@@ -9,19 +9,32 @@ game.canvas = canvas;
 // CHILDREN MANAGEMENT FUNCTIONALITY
 const ChildrenManager = (g_obj, beforeAttach = () => {}, beforeDetach = () => {}) => {
     g_obj.children = {};
+
+    // events
+    g_obj.events = g_obj.events || {};
+    g_obj.events.onAttached = g_obj.events.onAttached || function() {};
+    g_obj.events.onDetached = g_obj.events.onDetached || function() {};
+    g_obj.events.onChildAttached = g_obj.events.onChildAttached || function() {};
+    g_obj.events.onChildDetached = g_obj.events.onChildDetached || function() {};
+    
+    // methods
     g_obj.attachChild = (child) => {
         beforeAttach(child, g_obj);
 
         g_obj.children[child.id] = child;
         child.parent = g_obj;
-        // possible event
+
+        child.events.onAttached(parent);
+        g_obj.events.onChildAttached(child);
     }
     g_obj.detachChild = (child) => {
         beforeDetach();
 
         delete g_obj.children[child.id]
         delete child.parent
-        // possible event
+        
+        child.events.onDetached(parent);
+        g_obj.events.onChildDetached(child);
     }
 }
 //
@@ -41,6 +54,7 @@ export const GameObject = (params) => {
 
     g_obj.id = id;                  // ID
     g_obj.state = {};               // STATE
+    g_obj.events = {};              // EVENTS
     g_obj.draw = draw(g_obj);       // DRAW METHOD
     g_obj.update = update(g_obj);   // UPDATE METHOD
 

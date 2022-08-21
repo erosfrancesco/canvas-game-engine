@@ -6,7 +6,8 @@ const update = g_obj => delta => {
     g_obj.state.fps = Math.round(1 / delta);
 };
 
-const draw = g_obj => context => {
+const draw = g_obj => () => {
+    const { context } = g_obj.game
     const { fps, x, y } = g_obj.state;
 
     context.fillStyle = 'black';
@@ -27,7 +28,7 @@ export const FPS = (params) => {
     g_obj.state = { fps: 0, x, y };
 
     /** METHODS */
-    g_obj.draw = () => draw(g_obj)(g_obj.game.context);
+    g_obj.draw = () => draw(g_obj)();
     g_obj.update = (delta) => update(g_obj)(delta);
 
     return g_obj;
