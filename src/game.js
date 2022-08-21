@@ -6,6 +6,26 @@ game.canvas = canvas;
 //
 
 
+// CHILDREN MANAGEMENT FUNCTIONALITY
+const ChildrenManager = (g_obj, beforeAttach = () => {}, beforeDetach = () => {}) => {
+    g_obj.children = {};
+    g_obj.attachChild = (child) => {
+        beforeAttach(child, g_obj);
+
+        g_obj.children[child.id] = child;
+        child.parent = g_obj;
+        // possible event
+    }
+    g_obj.detachChild = (child) => {
+        beforeDetach();
+
+        delete g_obj.children[child.id]
+        delete child.parent
+        // possible event
+    }
+}
+//
+
 // GameObject constructor
 export const GameObject = (params) => {
     /** SANITIZATION */
@@ -25,41 +45,23 @@ export const GameObject = (params) => {
     g_obj.update = update(g_obj);   // UPDATE METHOD
 
     /** GAME INITIALIZATION */
-    g_obj.register = () => game.addChild(g_obj);
+    g_obj.register = () => game.attachChild(g_obj); // possible event
 
-    /** CHILDREN MANAGEMENT */
-    g_obj.children = {};
-    g_obj.attachChild = (child) => {
-        g_obj.children[child.id] = child;
-        child.parent = g_obj;
-    }
-    g_obj.detachChild = (child) => {
-        delete child.parent
-        delete g_obj.children[child.id]
-    }
+    ChildrenManager(g_obj);
 
     return g_obj;
 };
 //
 
+
 // Game Object management
-game.children = {};
-game.addChild = (g_obj) => {
-    /** SANITIZATION. SHOULD HAPPEN HERE? */
-    g_obj.update = g_obj.update || {};
-    g_obj.draw = g_obj.draw || {};
-    g_obj.id = g_obj.id || 'GAME_OBJECT_' + Object.keys(game.children).length;
-
-    game.children[g_obj.id] = g_obj;
-    g_obj.parent = game;
-
-    return g_obj;
-}
-game.removeChild = (g_obj) => {
-    delete game.children[g_obj.id];
-    delete g_obj.parent;
+ChildrenManager(game, (g_obj) => {
+     g_obj.update = g_obj.update || {};
+     g_obj.draw = g_obj.draw || {};
+     g_obj.id = g_obj.id || 'GAME_OBJECT_' + Object.keys(game.children).length;
+}, (g_obj) => {
     delete g_obj.game;
-}
+});
 game.forEachChild = (f) => Object.values(game.children).forEach(f);
 //
 
