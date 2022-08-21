@@ -4,9 +4,9 @@ import { FPS } from './examples/FPS.js'
 const fps1 = FPS({ id: 'OBJ_1' });
 fps1.register();
 
-const fps2 = FPS({ id: 'OBJ_2', x: 300 });
+const fps2 = FPS({ x: 300 });
 fps2.events.onAttached = () => {
-    console.log('Attached');
+    console.log('Attached', fps2);
 }
 fps2.events.onDetached = () => {
     const { context } = fps2.game

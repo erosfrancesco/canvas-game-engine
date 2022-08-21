@@ -7,7 +7,7 @@ game.canvas = canvas;
 
 
 // CHILDREN MANAGEMENT FUNCTIONALITY
-const ChildrenManager = (g_obj, beforeAttach = () => {}, beforeDetach = () => {}) => {
+const ChildrenManager = (g_obj) => {
     g_obj.children = {};
 
     // events
@@ -19,8 +19,6 @@ const ChildrenManager = (g_obj, beforeAttach = () => {}, beforeDetach = () => {}
     
     // methods
     g_obj.attachChild = (child) => {
-        beforeAttach(child, g_obj);
-
         g_obj.children[child.id] = child;
         child.parent = g_obj;
 
@@ -28,8 +26,6 @@ const ChildrenManager = (g_obj, beforeAttach = () => {}, beforeDetach = () => {}
         g_obj.events.onChildAttached(child);
     }
     g_obj.detachChild = (child) => {
-        beforeDetach();
-
         delete g_obj.children[child.id]
         delete child.parent
         
@@ -62,6 +58,12 @@ export const GameObject = (params) => {
     g_obj.register = () => game.attachChild(g_obj); // possible event
 
     ChildrenManager(g_obj);
+    
+    const attach = g_obj.attachChild;
+    g_obj.attachChild = (child) => {
+        child.id = child.id || g_obj.id + '_CHILD_' + Object.keys(child.children).length;
+        attach(child);
+    }
 
     return g_obj;
 };
@@ -69,14 +71,23 @@ export const GameObject = (params) => {
 
 
 // Game Object management
-ChildrenManager(game, (g_obj) => {
-     g_obj.update = g_obj.update || {};
-     g_obj.draw = g_obj.draw || {};
-     g_obj.id = g_obj.id || 'GAME_OBJECT_' + Object.keys(game.children).length;
-}, (g_obj) => {
-    delete g_obj.game;
-});
+ChildrenManager(game);
 game.forEachChild = (f) => Object.values(game.children).forEach(f);
+
+const attach = game.attachChild;
+const detach = game.detachChild;
+game.attachChild = (g_obj) => {
+    g_obj.update = g_obj.update || {};
+    g_obj.draw = g_obj.draw || {};
+    g_obj.id = g_obj.id || 'GAME_OBJECT_' + Object.keys(game.children).length;
+    console.log(g_obj.id);
+    attach(g_obj);
+}
+
+game.detachChild = (g_obj) => {
+    delete g_obj.game;
+    detach(g_obj);
+}
 //
 
 
