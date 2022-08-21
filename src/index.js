@@ -1,10 +1,15 @@
-import game from './g_engine.js'
+import './game.js'
+import { FPS } from './examples/FPS.js'
+
+const fps = FPS({ id: 'OBJ_1' })
+
+/*
 import FPS from './examples/fps.js'
 import Ghost from './examples/ghost.js'
-
 import CAGun from './examples/spawner.js'
 
-/** GAME INIT */
+
+/** GAME INIT 
 const fps = FPS({ id: 'G-Object_001' })
 fps.register(game)
 

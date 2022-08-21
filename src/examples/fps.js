@@ -1,33 +1,34 @@
 // EXAMPLE OF SIMPLE GAMEOBJECT
-import { GameObject } from '../game_objects/index.js';
+import { GameObject } from '../game.js';
 
 /** METHODS */
-const calculateFPS = gObj => secondsPassed => {
-    gObj.updates.fps = Math.round(1 / secondsPassed);
+const updateFPS = g_obj => delta => {
+    g_obj.state.fps = Math.round(1 / delta);
 };
 
-const drawFPS = gObj => context => {
+const drawFPS = g_obj => context => {
     context.fillStyle = 'black';
     context.fillRect(0, 0, 200, 100);
     context.font = '25px Arial';
     context.fillStyle = 'white';
-    context.fillText('FPS: ' + gObj.updates.fps, 10, 30);
+    context.fillText('FPS: ' + g_obj.state.fps, 10, 30);
 };
 
 /** CLASS */
 export const FPS = (params) => {
-    /** PARAMS SANITIZATION */
-    const { id } = params || {};
+    const g_obj = GameObject(params); 
 
     /** STATE */
-    const state =  { updates: { fps: 0 } }; // State could be managed better.
+    g_obj.state = { fps: 0 };
 
     /** METHODS */
-    const draw = (gObj) => (game) => drawFPS(gObj)(game.context);
-    const update = (gObj) => (delta, game) => calculateFPS(gObj)(delta);
+    g_obj.draw = () => drawFPS(g_obj)(g_obj.game.context);
+    g_obj.update = (delta) => updateFPS(g_obj)(delta);
 
-    /** CLASS */
-    return GameObject({ id, draw, update }, state); 
+    /** INTIALIZATION */
+    g_obj.register();
+
+    return g_obj;
 }
 
 export default FPS
