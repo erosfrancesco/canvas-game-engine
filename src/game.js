@@ -17,6 +17,7 @@ export const GameObject = (params) => {
 
     /** INITIALIZATION */
     const g_obj = {};
+    g_obj.game = game;
 
     g_obj.id = id;                  // ID
     g_obj.state = {};               // STATE
@@ -25,6 +26,17 @@ export const GameObject = (params) => {
 
     /** GAME INITIALIZATION */
     g_obj.register = () => game.addChild(g_obj);
+
+    /** CHILDREN MANAGEMENT */
+    g_obj.children = {};
+    g_obj.attachChild = (child) => {
+        g_obj.children[child.id] = child;
+        child.parent = g_obj;
+    }
+    g_obj.detachChild = (child) => {
+        delete child.parent
+        delete g_obj.children[child.id]
+    }
 
     return g_obj;
 };
@@ -40,7 +52,6 @@ game.addChild = (g_obj) => {
 
     game.children[g_obj.id] = g_obj;
     g_obj.parent = game;
-    g_obj.game = game;
 
     return g_obj;
 }
@@ -53,11 +64,18 @@ game.forEachChild = (f) => Object.values(game.children).forEach(f);
 //
 
 
+const iterDraw = (g_obj, ...params) => {
+    g_obj.draw(...params);
+    Object.values(g_obj.children).forEach(c => iterDraw(c, ...params));
+}
+const iterUpdate = (g_obj, ...params) => {
+    g_obj.update(...params);
+    Object.values(g_obj.children).forEach(c => iterUpdate(c, ...params));
+}
+
 // Engine main Methods
-export const draw = () => game.forEachChild(child => {
-    child.draw()
-});
-export const update = secondsPassed => game.forEachChild(child => child.update(secondsPassed || 0)); 
+export const draw = () => game.forEachChild(iterDraw);
+export const update = secondsPassed => game.forEachChild(child => iterUpdate(child, secondsPassed || 0)); 
 // game loop
 export const gameLoop = (oldTimeStamp, timeStamp) => {
     // Calculate how much time has passed
